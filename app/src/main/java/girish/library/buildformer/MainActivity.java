@@ -1,4 +1,5 @@
-package asu.tblr.jsonparser;
+
+package girish.library.buildformer;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -40,122 +41,341 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity {
+
+    @Bind(R.id.mainll) LinearLayout mainll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
         String json = "{" +
                 "\"view1\" : {" +
-                "\"required\" : true," +
                 "\"type\" : \"textview\"," +
-                "\"text\" : \"Hey this is a TextView, and it displays text.\"" +
+                "\"textsize\" : 20," +
+                "\"text\" : \"Planning and Preparation\"" +
                 "}," +
                 "\"view2\" : {" +
-                "\"required\" : true," +
-                "\"type\" : \"edittext-singleline\"," +
-                "\"hint\" : false," +
-                "\"description\" : \"Enter your name:\"" +
-                "}," +
-                "\"view3\" : {" +
-                "\"required\" : true," +
-                "\"type\" : \"edittext-paragraph\"," +
-                "\"hint\" : true," +
-                "\"description\" : \"Write a story:\"" +
-                "}," +
-                "\"view4\" : {" +
-                "\"required\" : true," +
-                "\"type\" : \"radio-group\"," +
-                "\"description\" : \"Select one out of these:\"," +
-                "\"options\" : [" +
-                "\"Option 1\"," +
-                "\"Option 2\"," +
-                "\"Option 3\"" +
-                "]" +
-                "}," +
-                "\"view5\" : {" +
-                "\"required\" : true," +
                 "\"type\" : \"radio-group-ratings\"," +
-                "\"description\" : \"Select one out of these:\"," +
+                "\"description\" : \"Demonstrating Knowledge of Content and Pedagogy\"," +
                 "\"minrating\" : 1," +
                 "\"instepsof\" : 1," +
                 "\"numberofsteps\" : 5" +
                 "}," +
+                "\"view3\" : {" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
+                "}," +
+                "" +
+                "\"view4\" : {" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Demonstrating Knowledge of Students\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
+                "}," +
+                "\"view5\" : {" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
+                "}," +
+                "" +
                 "\"view6\" : {" +
-                "\"required\" : true," +
-                "\"type\" : \"checkbox\"," +
-                "\"text\" : \"It satisfies a property\"" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Setting Instructional Outcomes\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
                 "}," +
                 "\"view7\" : {" +
-                "\"required\" : true," +
-                "\"type\" : \"checkbox-group\"," +
-                "\"description\" : \"Select one or more out of these:\"," +
-                "\"options\" : [" +
-                "\"Option 1\"," +
-                "\"Option 2\"," +
-                "\"Option 3\"" +
-                "]" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
                 "}," +
+                "" +
                 "\"view8\" : {" +
-                "\"required\" : true," +
-                "\"type\" : \"switch\"," +
-                "\"text\" : \"Which option do you wanna choose?\"," +
-                "\"choice1\" : \"This One\"," +
-                "\"choice2\" : \"That One\"" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Demonstrating Knowledge of Resources\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
                 "}," +
                 "\"view9\" : {" +
-                "\"required\" : true," +
-                "\"type\" : \"dropdown-list\"," +
-                "\"description\" : \"Select one from this list:\"," +
-                "\"options\" : [" +
-                "\"An Option\"," +
-                "\"Another Option\"," +
-                "\"One More Option\"" +
-                "]," +
-                "\"default\" : 3" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
                 "}," +
+                "" +
                 "\"view10\" : {" +
-                "\"required\" : true," +
-                "\"type\" : \"rubric\"," +
-                "\"src\" : \"http://sipi.usc.edu/database/preview/misc/4.1.01.png\"" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Designing Coherent Instructions\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
                 "}," +
                 "\"view11\" : {" +
-                "\"required\" : true," +
-                "\"type\" : \"date\"," +
-                "\"defaultcurrentdate\" : true" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
                 "}," +
+                "" +
                 "\"view12\" : {" +
-                "\"required\" : true," +
-                "\"type\" : \"time\"," +
-                "\"defaultcurrenttime\" : false" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Designing Student Assessments\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
                 "}," +
                 "\"view13\" : {" +
-                "\"type\" : \"section-break\"" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
                 "}," +
+                "" +
+                "" +
+                "" +
+                "" +
                 "\"view14\" : {" +
-                "\"type\" : \"group\"," +
-                "\"description\" : \"This is the description for the group.\"," +
-                "\"members\" : {" +
+                "\"type\" : \"textview\"," +
+                "\"textsize\" : 20," +
+                "\"text\" : \"The Classroom Environment\"" +
+                "}," +
+                "" +
                 "\"view15\" : {" +
-                "\"type\" : \"...\"" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Creating an Environment of Respect and Rapport\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
                 "}," +
                 "\"view16\" : {" +
-                "\"type\" : \"...\"" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
                 "}," +
+                "" +
                 "\"view17\" : {" +
-                "\"type\" : \"...\"" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Establishing a culture for Learning\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
                 "}," +
                 "\"view18\" : {" +
-                "\"type\" : \"...\"" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
                 "}," +
+                "" +
                 "\"view19\" : {" +
-                "\"type\" : \"...\"" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Managing classroom procedures\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
                 "}," +
                 "\"view20\" : {" +
-                "\"type\" : \"...\"" +
-                "}" +
-                "}" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
+                "}," +
+                "" +
+                "\"view21\" : {" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Managing Student Behavior\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
+                "}," +
+                "\"view22\" : {" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
+                "}," +
+                "" +
+                "\"view23\" : {" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Organizing physical space\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
+                "}," +
+                "\"view24\" : {" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
+                "}," +
+                "" +
+                "" +
+                "" +
+                "" +
+                "" +
+                "" +
+                "\"view25\" : {" +
+                "\"type\" : \"textview\"," +
+                "\"textsize\" : 20," +
+                "\"text\" : \"Professional Responsibilities\"" +
+                "}," +
+                "" +
+                "\"view26\" : {" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Reflecting on Teaching\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
+                "}," +
+                "\"view27\" : {" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
+                "}," +
+                "" +
+                "\"view28\" : {" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Maintaining Accurate Records\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
+                "}," +
+                "\"view29\" : {" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
+                "}," +
+                "" +
+                "\"view30\" : {" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Communicating with families\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
+                "}," +
+                "\"view31\" : {" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
+                "}," +
+                "" +
+                "\"view32\" : {" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Participating in Professional Community\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
+                "}," +
+                "\"view33\" : {" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
+                "}," +
+                "" +
+                "\"view34\" : {" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Growing and Developing Professionally\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
+                "}," +
+                "\"view35\" : {" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
+                "}," +
+                "" +
+                "\"view36\" : {" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Showing Professionalism\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
+                "}," +
+                "\"view37\" : {" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
+                "}," +
+                "" +
+                "" +
+                "" +
+                "" +
+                "" +
+                "" +
+                "" +
+                "\"view38\" : {" +
+                "\"type\" : \"textview\"," +
+                "\"textsize\" : 20," +
+                "\"text\" : \"Instruction\"" +
+                "}," +
+                "" +
+                "\"view39\" : {" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Communicating with Students\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
+                "}," +
+                "\"view40\" : {" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
+                "}," +
+                "" +
+                "\"view41\" : {" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Using Questioning and Discussion Techniques\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
+                "}," +
+                "\"view42\" : {" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
+                "}," +
+                "" +
+                "\"view43\" : {" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Engaging Students in Learning\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
+                "}," +
+                "\"view44\" : {" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
+                "}," +
+                "" +
+                "\"view45\" : {" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Using Assessment in Instruction\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
+                "}," +
+                "\"view46\" : {" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
+                "}," +
+                "" +
+                "\"view47\" : {" +
+                "\"type\" : \"radio-group-ratings\"," +
+                "\"description\" : \"Demonstrating Flexibility and Responsiveness\"," +
+                "\"minrating\" : 1," +
+                "\"instepsof\" : 1," +
+                "\"numberofsteps\" : 5" +
+                "}," +
+                "\"view48\" : {" +
+                "\"type\" : \"edittext-singleline\"," +
+                "\"hint\" : false," +
+                "\"description\" : \"Notes\"" +
                 "}" +
                 "}";
 
@@ -163,7 +383,6 @@ public class MainActivity extends AppCompatActivity {
             JSONTokener jsonTokener = new JSONTokener(json);
             JSONObject root = (JSONObject) jsonTokener.nextValue();
             int i = 1;
-            LinearLayout mainll = (LinearLayout) findViewById(R.id.mainll);
 
             //noinspection InfiniteLoopStatement
             while (true) {
@@ -175,8 +394,10 @@ public class MainActivity extends AppCompatActivity {
                     case "textview":
 
                         String text = object.getString("text");
+                        int textsize = object.isNull("textsize")? 16 : object.getInt("textsize");
 
                         TextView textView = new TextView(this);
+                        textView.setTextSize(textsize);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(0, (int) getResources().getDimension(R.dimen.dp20), 0, (int) getResources().getDimension(R.dimen.dp20));
                         textView.setLayoutParams(params);
@@ -499,6 +720,18 @@ public class MainActivity extends AppCompatActivity {
             }
         } catch (Exception e) {
             Log.e("Exception", e.toString());
+
+            Button button = new Button(this);
+            button.setText(R.string.submit);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0, (int) getResources().getDimension(R.dimen.dp20), 0, (int) getResources().getDimension(R.dimen.dp20));
+            button.setLayoutParams(params);
+            mainll.addView(button);
+
+            button = new Button(this);
+            button.setText(R.string.save_form);
+            button.setLayoutParams(params);
+            mainll.addView(button);
         }
     }
 
@@ -569,6 +802,12 @@ public class MainActivity extends AppCompatActivity {
             dialog.dismiss();
             bmImage.setImageBitmap(result);
         }
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        ButterKnife.unbind(this);
     }
 
 }

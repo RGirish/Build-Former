@@ -6,5 +6,7 @@
     <string name="enter_a_time">Click button to enter a Time:</string>
     <string name="pick_a_date">Pick a Date</string>
     <string name="enter_a_date">Click button to enter a Date:</string>
+    <string name="submit">Submit</string>
+    <string name="save_form">Save Form</string>
 
 </resources>
