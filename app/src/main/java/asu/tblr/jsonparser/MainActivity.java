@@ -1,33 +1,41 @@
-
 package asu.tblr.jsonparser;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.TimePicker;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -110,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 "\"view10\" : {" +
                 "\"required\" : true," +
                 "\"type\" : \"rubric\"," +
-                "\"src\" : \"link-to-image\"" +
+                "\"src\" : \"http://sipi.usc.edu/database/preview/misc/4.1.01.png\"" +
                 "}," +
                 "\"view11\" : {" +
                 "\"required\" : true," +
@@ -155,12 +163,14 @@ public class MainActivity extends AppCompatActivity {
             JSONTokener jsonTokener = new JSONTokener(json);
             JSONObject root = (JSONObject) jsonTokener.nextValue();
             int i = 1;
-            LinearLayout mainll = (LinearLayout)findViewById(R.id.mainll);
-            while(true){
+            LinearLayout mainll = (LinearLayout) findViewById(R.id.mainll);
+
+            //noinspection InfiniteLoopStatement
+            while (true) {
                 JSONObject object = root.getJSONObject("view" + i);
                 String type = object.getString("type");
 
-                switch (type){
+                switch (type) {
 
                     case "textview":
 
@@ -168,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
                         TextView textView = new TextView(this);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params.setMargins(0, (int)getResources().getDimension(R.dimen.dp20), 0, (int)getResources().getDimension(R.dimen.dp20));
+                        params.setMargins(0, (int) getResources().getDimension(R.dimen.dp20), 0, (int) getResources().getDimension(R.dimen.dp20));
                         textView.setLayoutParams(params);
                         textView.setText(text);
                         mainll.addView(textView);
@@ -182,18 +192,18 @@ public class MainActivity extends AppCompatActivity {
                         String description = object.getString("description");
 
                         EditText editText = new EditText(this);
-                        if(hint){
+                        if (hint) {
                             editText.setHint(description);
-                            params = new LinearLayout.LayoutParams((int)getResources().getDimension(R.dimen.dp200), ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params = new LinearLayout.LayoutParams((int) getResources().getDimension(R.dimen.dp200), ViewGroup.LayoutParams.WRAP_CONTENT);
                             params.setMargins(0, (int) getResources().getDimension(R.dimen.dp20), 0, (int) getResources().getDimension(R.dimen.dp20));
-                        }else{
+                        } else {
                             textView = new TextView(this);
                             params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            params.setMargins(0, (int)getResources().getDimension(R.dimen.dp20), 0, (int)getResources().getDimension(R.dimen.dp10));
+                            params.setMargins(0, (int) getResources().getDimension(R.dimen.dp20), 0, (int) getResources().getDimension(R.dimen.dp10));
                             textView.setLayoutParams(params);
                             textView.setText(description);
                             mainll.addView(textView);
-                            params = new LinearLayout.LayoutParams((int)getResources().getDimension(R.dimen.dp200), ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params = new LinearLayout.LayoutParams((int) getResources().getDimension(R.dimen.dp200), ViewGroup.LayoutParams.WRAP_CONTENT);
                             params.setMargins(0, 0, 0, (int) getResources().getDimension(R.dimen.dp20));
                         }
 
@@ -209,18 +219,18 @@ public class MainActivity extends AppCompatActivity {
                         description = object.getString("description");
 
                         editText = new EditText(this);
-                        if(hint){
+                        if (hint) {
                             editText.setHint(description);
-                            params = new LinearLayout.LayoutParams((int)getResources().getDimension(R.dimen.dp200), ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params = new LinearLayout.LayoutParams((int) getResources().getDimension(R.dimen.dp200), ViewGroup.LayoutParams.WRAP_CONTENT);
                             params.setMargins(0, (int) getResources().getDimension(R.dimen.dp20), 0, (int) getResources().getDimension(R.dimen.dp20));
-                        }else{
+                        } else {
                             textView = new TextView(this);
                             params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            params.setMargins(0, (int)getResources().getDimension(R.dimen.dp20), 0, (int)getResources().getDimension(R.dimen.dp10));
+                            params.setMargins(0, (int) getResources().getDimension(R.dimen.dp20), 0, (int) getResources().getDimension(R.dimen.dp10));
                             textView.setLayoutParams(params);
                             textView.setText(description);
                             mainll.addView(textView);
-                            params = new LinearLayout.LayoutParams((int)getResources().getDimension(R.dimen.dp200), ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params = new LinearLayout.LayoutParams((int) getResources().getDimension(R.dimen.dp200), ViewGroup.LayoutParams.WRAP_CONTENT);
                             params.setMargins(0, 0, 0, (int) getResources().getDimension(R.dimen.dp20));
                         }
 
@@ -250,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
                         radioGroup.setLayoutParams(params);
 
                         RadioButton radioButton;
-                        for(int index=0 ; index<options.length() ; index++){
+                        for (int index = 0; index < options.length(); index++) {
                             radioButton = new RadioButton(this);
                             radioButton.setText(options.getString(index));
                             radioGroup.addView(radioButton);
@@ -282,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
 
                         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins((int) getResources().getDimension(R.dimen.dp20), 0, (int) getResources().getDimension(R.dimen.dp20), 0);
-                        for(int index=minRating ; index<=inStepsOf*numberOfSteps ; index+=inStepsOf){
+                        for (int index = minRating; index <= inStepsOf * numberOfSteps; index += inStepsOf) {
                             radioButton = new RadioButton(this);
                             radioButton.setLayoutParams(params);
                             radioButton.setText(String.valueOf(index));
@@ -316,12 +326,13 @@ public class MainActivity extends AppCompatActivity {
                         mainll.addView(textView);
 
                         options = object.getJSONArray("options");
-                        for(int index=0 ; index<options.length() ; index++){
+                        for (int index = 0; index < options.length(); index++) {
                             text = options.getString(index);
                             checkBox = new CheckBox(this);
                             checkBox.setText(text);
                             params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            if(index == options.length()-1) params.setMargins(0, 0, 0, (int) getResources().getDimension(R.dimen.dp20));
+                            if (index == options.length() - 1)
+                                params.setMargins(0, 0, 0, (int) getResources().getDimension(R.dimen.dp20));
                             checkBox.setLayoutParams(params);
                             mainll.addView(checkBox);
                         }
@@ -354,7 +365,7 @@ public class MainActivity extends AppCompatActivity {
 
                         SwitchCompat switchCompat = new SwitchCompat(this);
                         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params.setMargins((int)getResources().getDimension(R.dimen.dp10), 0, (int)getResources().getDimension(R.dimen.dp10), 0);
+                        params.setMargins((int) getResources().getDimension(R.dimen.dp10), 0, (int) getResources().getDimension(R.dimen.dp10), 0);
                         switchCompat.setLayoutParams(params);
                         ll.addView(switchCompat);
 
@@ -384,7 +395,7 @@ public class MainActivity extends AppCompatActivity {
                         params.setMargins(0, 0, 0, (int) getResources().getDimension(R.dimen.dp20));
                         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item);
                         options = object.getJSONArray("options");
-                        for(int index=0 ; index<options.length() ; index++) {
+                        for (int index = 0; index < options.length(); index++) {
                             adapter.add(options.getString(index));
                         }
                         spinner.setAdapter(adapter);
@@ -394,21 +405,41 @@ public class MainActivity extends AppCompatActivity {
 
                     case "rubric":
 
+                        ImageView imageView = new ImageView(this);
+                        params = new LinearLayout.LayoutParams((int) getResources().getDimension(R.dimen.dp30), (int) getResources().getDimension(R.dimen.dp30));
+                        params.setMargins(0, (int) getResources().getDimension(R.dimen.dp20), 0, (int) getResources().getDimension(R.dimen.dp20));
+                        imageView.setImageResource(R.drawable.icon_info);
+                        imageView.setLayoutParams(params);
+                        imageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Dialog dialog = new Dialog(MainActivity.this);
+                                ImageView rubricImage = new ImageView(MainActivity.this);
+                                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                dialog.addContentView(rubricImage, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                dialog.show();
+                                new DownloadImageTask(rubricImage).execute("http://sipi.usc.edu/database/preview/misc/4.1.07.png");
+                            }
+                        });
+                        mainll.addView(imageView);
+
                         break;
+
                     case "date":
 
                         textView = new TextView(this);
-                        textView.setText("Click button to enter a Date:");
+                        textView.setText(R.string.enter_a_date);
                         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(0, (int) getResources().getDimension(R.dimen.dp20), 0, (int) getResources().getDimension(R.dimen.dp10));
                         textView.setLayoutParams(params);
+                        textView.setTag("date");
                         mainll.addView(textView);
 
                         Button button = new Button(this);
                         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(0, 0, 0, (int) getResources().getDimension(R.dimen.dp20));
                         button.setLayoutParams(params);
-                        button.setText("Pick a Date");
+                        button.setText(R.string.pick_a_date);
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -419,14 +450,38 @@ public class MainActivity extends AppCompatActivity {
                         mainll.addView(button);
 
                         break;
+
                     case "time":
 
+                        textView = new TextView(this);
+                        textView.setText(R.string.enter_a_time);
+                        params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(0, (int) getResources().getDimension(R.dimen.dp20), 0, (int) getResources().getDimension(R.dimen.dp10));
+                        textView.setLayoutParams(params);
+                        textView.setTag("time");
+                        mainll.addView(textView);
+
+                        button = new Button(this);
+                        params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(0, 0, 0, (int) getResources().getDimension(R.dimen.dp20));
+                        button.setLayoutParams(params);
+                        button.setText(R.string.pick_a_time);
+                        button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                DialogFragment newFragment = new TimePickerFragment();
+                                newFragment.show(getSupportFragmentManager(), "timePicker");
+                            }
+                        });
+                        mainll.addView(button);
+
                         break;
+
                     case "section-break":
 
                         button = new Button(this);
                         button.setBackgroundColor(Color.GRAY);
-                        params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int)getResources().getDimension(R.dimen.dp1));
+                        params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) getResources().getDimension(R.dimen.dp1));
                         params.setMargins(0, (int) getResources().getDimension(R.dimen.dp20), 0, (int) getResources().getDimension(R.dimen.dp20));
                         button.setLayoutParams(params);
                         mainll.addView(button);
@@ -442,23 +497,20 @@ public class MainActivity extends AppCompatActivity {
                 }
                 i++;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e("Exception", e.toString());
         }
     }
 
-    public static class DatePickerFragment extends DialogFragment
-            implements DatePickerDialog.OnDateSetListener {
+    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
         @Override
+        @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
             final Calendar c = Calendar.getInstance();
             int year = c.get(Calendar.YEAR);
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
-
-            // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 
@@ -466,7 +518,56 @@ public class MainActivity extends AppCompatActivity {
             Calendar newDate = Calendar.getInstance();
             newDate.set(year, month, day);
             SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-            Toast.makeText(getActivity(), dateFormatter.format(newDate.getTime()), Toast.LENGTH_SHORT).show();
+            TextView textView = (TextView) (getActivity().findViewById(R.id.mainll)).findViewWithTag("date");
+            textView.setText(getString(R.string.chosen_date, dateFormatter.format(newDate.getTime())));
+        }
+    }
+
+    public static class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+
+        @Override
+        @NonNull
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+            return new TimePickerDialog(getActivity(), this, hour, minute, true);
+        }
+
+        public void onTimeSet(TimePicker view, int hour, int minute) {
+            TextView textView = (TextView) (getActivity().findViewById(R.id.mainll)).findViewWithTag("time");
+            textView.setText(getString(R.string.chosen_time, hour + ":" + minute));
+        }
+    }
+
+    class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+        ProgressDialog dialog;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected void onPreExecute() {
+            dialog = ProgressDialog.show(MainActivity.this, null, "Loading...", true);
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            dialog.dismiss();
+            bmImage.setImageBitmap(result);
         }
     }
 

@@ -9,6 +9,20 @@
         <dex dex="X:\MLFTC\JsonParser\app\build\intermediates\pre-dexed\debug\classes-7ee536743ca52cce83fd625ec88034cbb7773c99.jar" />
     </item>
     <item
+        jar="C:\Users\Girish\.gradle\caches\modules-2\files-2.1\com.jakewharton\butterknife\7.0.1\d5d13ea991eab0252e3710e5df3d6a9d4b21d461\butterknife-7.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d5d13ea991eab0252e3710e5df3d6a9d4b21d461">
+        <dex dex="X:\MLFTC\JsonParser\app\build\intermediates\pre-dexed\debug\butterknife-7.0.1-809f39d6e4d915cf6272ae7e1c3b2879ad468184.jar" />
+    </item>
+    <item
+        jar="X:\MLFTC\JsonParser\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
+        <dex dex="X:\MLFTC\JsonParser\app\build\intermediates\pre-dexed\debug\classes-bb980bd4d7814bf7275fd23a72df56df54702f31.jar" />
+    </item>
+    <item
         jar="C:\Users\Girish\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.0.1\support-annotations-23.0.1.jar"
         jumboMode="false"
         revision="23.0.1"
@@ -21,13 +35,6 @@
         revision="23.0.1"
         sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
         <dex dex="X:\MLFTC\JsonParser\app\build\intermediates\pre-dexed\debug\internal_impl-23.0.1-bf530d2edbf432bef051adfb8c19ad4a7f8171f6.jar" />
-    </item>
-    <item
-        jar="X:\MLFTC\JsonParser\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
-        <dex dex="X:\MLFTC\JsonParser\app\build\intermediates\pre-dexed\debug\classes-bb980bd4d7814bf7275fd23a72df56df54702f31.jar" />
     </item>
 
 </items>
