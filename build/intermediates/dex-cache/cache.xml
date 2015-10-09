@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="X:\MLFTC\JsonParser\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
+        <dex dex="X:\MLFTC\JsonParser\app\build\intermediates\pre-dexed\debug\classes-7ee536743ca52cce83fd625ec88034cbb7773c99.jar" />
+    </item>
+    <item
+        jar="C:\Users\Girish\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.0.1\support-annotations-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
+        <dex dex="X:\MLFTC\JsonParser\app\build\intermediates\pre-dexed\debug\support-annotations-23.0.1-8a7e355778fd42ea1616e1156ca20582cab03430.jar" />
+    </item>
+    <item
+        jar="X:\MLFTC\JsonParser\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\libs\internal_impl-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
+        <dex dex="X:\MLFTC\JsonParser\app\build\intermediates\pre-dexed\debug\internal_impl-23.0.1-bf530d2edbf432bef051adfb8c19ad4a7f8171f6.jar" />
+    </item>
+    <item
+        jar="X:\MLFTC\JsonParser\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
+        <dex dex="X:\MLFTC\JsonParser\app\build\intermediates\pre-dexed\debug\classes-bb980bd4d7814bf7275fd23a72df56df54702f31.jar" />
+    </item>
+
+</items>
