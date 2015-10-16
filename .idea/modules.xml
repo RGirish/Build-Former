@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/JsonParser.iml" filepath="$PROJECT_DIR$/JsonParser.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/buildformer/buildformer.iml" filepath="$PROJECT_DIR$/buildformer/buildformer.iml" />
     </modules>
   </component>
 </project>
