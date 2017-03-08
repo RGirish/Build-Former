@@ -1,4 +1,29 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'buildformer'
+
+    publishedGroupId = 'com.girish.library.buildformer'
+    libraryName = 'buildformer'
+    artifact = 'buildformer'
+
+    libraryDescription = 'A library for the dynamic creation of forms in Android'
+
+    siteUrl = 'https://github.com/RGirish/Build-Fomer'
+    gitUrl = 'https://github.com/RGirish/Build-Fomer.git'
+
+    libraryVersion = '0.9.1'
+
+    developerId = 'rgirish1994'
+    developerName = 'Girish Raman'
+    developerEmail = 'rgirish1994@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
 
 android {
     compileSdkVersion 25
@@ -24,3 +49,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'org.projectlombok:lombok:1.16.12'
 }
+
+apply from: 'install.gradle'
+apply from: 'bintray.gradle'
