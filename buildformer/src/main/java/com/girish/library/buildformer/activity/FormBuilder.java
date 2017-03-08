@@ -1,8 +1,12 @@
-package com.girish.library.buildformer;
+package com.girish.library.buildformer.activity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Color;
+import android.os.Environment;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -15,27 +19,40 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.girish.library.buildformer.fragments.DatePickerFragment;
-import com.girish.library.buildformer.fragments.TimePickerFragment;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.girish.library.buildformer.R;
+import com.girish.library.buildformer.fragment.DatePickerFragment;
+import com.girish.library.buildformer.fragment.TimePickerFragment;
+import com.girish.library.buildformer.model.BFCheckbox;
+import com.girish.library.buildformer.model.BFCheckboxGroup;
+import com.girish.library.buildformer.model.BFDatePicker;
+import com.girish.library.buildformer.model.BFDropDownList;
+import com.girish.library.buildformer.model.BFEditText;
+import com.girish.library.buildformer.model.BFRadioGroup;
+import com.girish.library.buildformer.model.BFRadioGroupRatings;
+import com.girish.library.buildformer.model.BFSectionBreak;
+import com.girish.library.buildformer.model.BFSwitch;
+import com.girish.library.buildformer.model.BFTextView;
+import com.girish.library.buildformer.model.BFTimePicker;
+import com.girish.library.buildformer.model.BFView;
+import com.girish.library.buildformer.model.JSONFeed;
+import com.girish.library.buildformer.utils.Constants;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-public class FormBuilder {
-    private Activity activity;
+public class FormBuilder extends ContextWrapper {
     private LinearLayout parentLayout;
     public static final int EDIT_TEXT_MODE_HINT = 1;
     public static final int EDIT_TEXT_MODE_SEPARATE = 2;
+    private List<BFView> views;
 
-    public FormBuilder(Activity activity) {
-        this.activity = activity;
-    }
-
-    public void setParentLayout(LinearLayout parentLayout) {
+    public FormBuilder(Context context, LinearLayout parentLayout) {
+        super(context);
         this.parentLayout = parentLayout;
-    }
-
-    public void setParentLayout(int parentLayoutId) {
-        this.parentLayout = (LinearLayout) activity.findViewById(parentLayoutId);
+        this.views = new ArrayList<>();
     }
 
     /**
@@ -45,7 +62,7 @@ public class FormBuilder {
      * @param textSize the size of the text to be displayed
      */
     public void createTextView(String text, int textSize) {
-        TextView textView = new TextView(activity);
+        TextView textView = new TextView(this);
         textView.setTextSize(textSize);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -53,6 +70,12 @@ public class FormBuilder {
         textView.setLayoutParams(params);
         textView.setText(text);
         parentLayout.addView(textView);
+
+        BFTextView bfTextView = new BFTextView();
+        bfTextView.setType(Constants.TYPE_TEXT_VIEW);
+        bfTextView.setText(text);
+        bfTextView.setTextSize(textSize);
+        views.add(bfTextView);
     }
 
     /**
@@ -61,7 +84,7 @@ public class FormBuilder {
      * @param text the text to display
      */
     public void createTextView(String text) {
-        TextView textView = new TextView(activity);
+        TextView textView = new TextView(this);
         textView.setTextSize(16);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -69,6 +92,12 @@ public class FormBuilder {
         textView.setLayoutParams(params);
         textView.setText(text);
         parentLayout.addView(textView);
+
+        BFTextView bfTextView = new BFTextView();
+        bfTextView.setType(Constants.TYPE_TEXT_VIEW);
+        bfTextView.setText(text);
+        bfTextView.setTextSize(16);
+        views.add(bfTextView);
     }
 
     /**
@@ -81,14 +110,14 @@ public class FormBuilder {
      *                    paragraphs
      */
     public void createEditText(String description, int mode, boolean singleLine) {
-        EditText editText = new EditText(activity);
+        EditText editText = new EditText(this);
         LinearLayout.LayoutParams params = null;
         if (mode == EDIT_TEXT_MODE_HINT) {
             editText.setHint(description);
             params = new LinearLayout.LayoutParams(getDimension(R.dimen.dp200), ViewGroup.LayoutParams.WRAP_CONTENT);
             params.setMargins(0, getDimension(R.dimen.dp20), 0, getDimension(R.dimen.dp20));
         } else if (mode == EDIT_TEXT_MODE_SEPARATE) {
-            TextView textView = new TextView(activity);
+            TextView textView = new TextView(this);
             params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.setMargins(0, getDimension(R.dimen.dp20), 0, getDimension(R.dimen.dp10));
             textView.setLayoutParams(params);
@@ -101,6 +130,13 @@ public class FormBuilder {
         if (!singleLine) editText.setLines(5);
         editText.setLayoutParams(params);
         parentLayout.addView(editText);
+
+        BFEditText bfEditText = new BFEditText();
+        bfEditText.setType(Constants.TYPE_EDIT_TEXT);
+        bfEditText.setDescription(description);
+        bfEditText.setMode(mode);
+        bfEditText.setSingleLine(singleLine);
+        views.add(bfEditText);
     }
 
     /**
@@ -109,14 +145,14 @@ public class FormBuilder {
      * @param description a description of what the Radio Group stands for. This is displayed above the RadioGroup itself.
      * @param options     a List of Strings that represent the options that are to be part of the RadioGroup.
      */
-    public void createRadioGroup(String description, String... options) {
-        TextView textView = new TextView(activity);
+    public void createRadioGroup(String description, List<String> options) {
+        TextView textView = new TextView(this);
         textView.setText(description);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, getDimension(R.dimen.dp20), 0, getDimension(R.dimen.dp10));
         textView.setLayoutParams(params);
 
-        RadioGroup radioGroup = new RadioGroup(activity);
+        RadioGroup radioGroup = new RadioGroup(this);
         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(getDimension(R.dimen.dp20), 0, getDimension(R.dimen.dp20), getDimension(R.dimen.dp20));
         radioGroup.setOrientation(LinearLayout.VERTICAL);
@@ -124,31 +160,37 @@ public class FormBuilder {
 
         RadioButton radioButton;
         for (String option : options) {
-            radioButton = new RadioButton(activity);
+            radioButton = new RadioButton(this);
             radioButton.setText(option);
             radioGroup.addView(radioButton);
         }
 
         parentLayout.addView(textView);
         parentLayout.addView(radioGroup);
+
+        BFRadioGroup bfRadioGroup = new BFRadioGroup();
+        bfRadioGroup.setType(Constants.TYPE_RADIO_GROUP);
+        bfRadioGroup.setDescription(description);
+        bfRadioGroup.setOptions(options);
+        views.add(bfRadioGroup);
     }
 
     /**
      * Creates a RadioGroup for Ratings in the previously set Parent Layout.
      *
-     * @param description   a description of the radio group
-     * @param minRating     the minimum ratings number to display
-     * @param inStepsOf     the difference between successive ratings
-     * @param numberOfSteps the total number of ratings to provide
+     * @param description     a description of the radio group
+     * @param minRating       the minimum ratings number to display
+     * @param inStepsOf       the difference between successive ratings
+     * @param numberOfRatings the total number of ratings to provide
      */
-    public void createRatingsGroup(String description, int minRating, int inStepsOf, int numberOfSteps) {
-        TextView textView = new TextView(activity);
+    public void createRatingsGroup(String description, int minRating, int inStepsOf, int numberOfRatings) {
+        TextView textView = new TextView(this);
         textView.setText(description);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, getDimension(R.dimen.dp20), 0, getDimension(R.dimen.dp10));
         textView.setLayoutParams(params);
 
-        RadioGroup radioGroup = new RadioGroup(activity);
+        RadioGroup radioGroup = new RadioGroup(this);
         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(getDimension(R.dimen.dp20), 0, getDimension(R.dimen.dp20), getDimension(R.dimen.dp20));
         radioGroup.setOrientation(LinearLayout.HORIZONTAL);
@@ -156,14 +198,22 @@ public class FormBuilder {
 
         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(getDimension(R.dimen.dp20), 0, getDimension(R.dimen.dp20), 0);
-        for (int index = minRating; index <= inStepsOf * numberOfSteps; index += inStepsOf) {
-            RadioButton radioButton = new RadioButton(activity);
+        for (int index = minRating; index <= inStepsOf * numberOfRatings; index += inStepsOf) {
+            RadioButton radioButton = new RadioButton(this);
             radioButton.setLayoutParams(params);
             radioButton.setText(String.valueOf(index));
             radioGroup.addView(radioButton);
         }
         parentLayout.addView(textView);
         parentLayout.addView(radioGroup);
+
+        BFRadioGroupRatings bfRadioGroupRatings = new BFRadioGroupRatings();
+        bfRadioGroupRatings.setType(Constants.TYPE_RADIO_GROUP_RATINGS);
+        bfRadioGroupRatings.setDescription(description);
+        bfRadioGroupRatings.setMinRating(minRating);
+        bfRadioGroupRatings.setInStepsOf(inStepsOf);
+        bfRadioGroupRatings.setNumberOfRatings(numberOfRatings);
+        views.add(bfRadioGroupRatings);
     }
 
     /**
@@ -172,12 +222,17 @@ public class FormBuilder {
      * @param description a description of the Checkbox to display before the Checkbox.
      */
     public void createCheckbox(String description) {
-        CheckBox checkBox = new CheckBox(activity);
+        CheckBox checkBox = new CheckBox(this);
         checkBox.setText(description);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, getDimension(R.dimen.dp20), 0, getDimension(R.dimen.dp20));
         checkBox.setLayoutParams(params);
         parentLayout.addView(checkBox);
+
+        BFCheckbox bfCheckbox = new BFCheckbox();
+        bfCheckbox.setType(Constants.TYPE_CHECKBOX);
+        bfCheckbox.setDescription(description);
+        views.add(bfCheckbox);
     }
 
     /**
@@ -187,7 +242,7 @@ public class FormBuilder {
      * @param options     a List of String that contains the options to display as part of the Checkbox Group.
      */
     public void createCheckboxGroup(String description, List<String> options) {
-        TextView textView = new TextView(activity);
+        TextView textView = new TextView(this);
         textView.setText(description);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, getDimension(R.dimen.dp20), 0, getDimension(R.dimen.dp10));
@@ -196,13 +251,19 @@ public class FormBuilder {
 
         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         for (int i = 0; i < options.size(); ++i) {
-            CheckBox checkBox = new CheckBox(activity);
+            CheckBox checkBox = new CheckBox(this);
             checkBox.setText(options.get(i));
             if (i == options.size() - 1)
                 params.setMargins(0, 0, 0, getDimension(R.dimen.dp20));
             checkBox.setLayoutParams(params);
             parentLayout.addView(checkBox);
         }
+
+        BFCheckboxGroup bfCheckboxGroup = new BFCheckboxGroup();
+        bfCheckboxGroup.setType(Constants.TYPE_CHECKBOX_GROUP);
+        bfCheckboxGroup.setDescription(description);
+        bfCheckboxGroup.setOptions(options);
+        views.add(bfCheckboxGroup);
     }
 
     /**
@@ -213,37 +274,44 @@ public class FormBuilder {
      * @param secondChoice the choice to display to the right of the switch.
      */
     public void createSwitch(String description, String firstChoice, String secondChoice) {
-        TextView textView = new TextView(activity);
+        TextView textView = new TextView(this);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, getDimension(R.dimen.dp20), 0, getDimension(R.dimen.dp10));
         textView.setLayoutParams(params);
         textView.setText(description);
         parentLayout.addView(textView);
 
-        LinearLayout ll = new LinearLayout(activity);
+        LinearLayout ll = new LinearLayout(this);
         ll.setOrientation(LinearLayout.HORIZONTAL);
         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 0, 0, getDimension(R.dimen.dp20));
         ll.setLayoutParams(params);
 
-        textView = new TextView(activity);
+        textView = new TextView(this);
         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         textView.setLayoutParams(params);
         textView.setText(firstChoice);
         ll.addView(textView);
 
-        SwitchCompat switchCompat = new SwitchCompat(activity);
+        SwitchCompat switchCompat = new SwitchCompat(this);
         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(getDimension(R.dimen.dp10), 0, getDimension(R.dimen.dp10), 0);
         switchCompat.setLayoutParams(params);
         ll.addView(switchCompat);
 
-        textView = new TextView(activity);
+        textView = new TextView(this);
         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         textView.setLayoutParams(params);
         textView.setText(secondChoice);
         ll.addView(textView);
         parentLayout.addView(ll);
+
+        BFSwitch bfSwitch = new BFSwitch();
+        bfSwitch.setType(Constants.TYPE_SWITCH);
+        bfSwitch.setDescription(description);
+        bfSwitch.setFirstChoice(firstChoice);
+        bfSwitch.setSecondChoice(secondChoice);
+        views.add(bfSwitch);
     }
 
     /**
@@ -253,29 +321,35 @@ public class FormBuilder {
      * @param options     a List of String that represents the options in the drop down list.
      */
     public void createDropDownList(String description, List<String> options) {
-        TextView textView = new TextView(activity);
+        TextView textView = new TextView(this);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(getDimension(R.dimen.dp20), 0, getDimension(R.dimen.dp10), 0);
         textView.setLayoutParams(params);
         textView.setText(description);
         parentLayout.addView(textView);
 
-        Spinner spinner = new Spinner(activity);
+        Spinner spinner = new Spinner(this);
         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 0, 0, getDimension(R.dimen.dp20));
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, R.layout.spinner_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item);
         for (String option : options) {
             adapter.add(option);
         }
         spinner.setAdapter(adapter);
         parentLayout.addView(spinner);
+
+        BFDropDownList bfDropDownList = new BFDropDownList();
+        bfDropDownList.setType(Constants.TYPE_DROP_DOWN_LIST);
+        bfDropDownList.setDescription(description);
+        bfDropDownList.setOptions(options);
+        views.add(bfDropDownList);
     }
 
     /**
      * Creates a DatePicker in the previously set Parent Layout.
      */
     public void createDatePicker() {
-        TextView textView = new TextView(activity);
+        TextView textView = new TextView(this);
         textView.setText(R.string.enter_a_date);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, getDimension(R.dimen.dp20), 0, getDimension(R.dimen.dp10));
@@ -283,11 +357,12 @@ public class FormBuilder {
         textView.setTag("date");
         parentLayout.addView(textView);
 
-        Button button = new Button(activity);
+        Button button = new Button(this);
         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 0, 0, getDimension(R.dimen.dp20));
         button.setLayoutParams(params);
         button.setText(R.string.pick_a_date);
+        final Activity activity = (Activity) getBaseContext();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -297,13 +372,17 @@ public class FormBuilder {
             }
         });
         parentLayout.addView(button);
+
+        BFDatePicker bfDatePicker = new BFDatePicker();
+        bfDatePicker.setType(Constants.TYPE_DATE_PICKER);
+        views.add(bfDatePicker);
     }
 
     /**
      * Creates a TimePicker in the previously set Parent Layout.
      */
     public void createTimePicker() {
-        TextView textView = new TextView(activity);
+        TextView textView = new TextView(this);
         textView.setText(R.string.enter_a_time);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, getDimension(R.dimen.dp20), 0, getDimension(R.dimen.dp10));
@@ -311,11 +390,12 @@ public class FormBuilder {
         textView.setTag("time");
         parentLayout.addView(textView);
 
-        Button button = new Button(activity);
+        Button button = new Button(this);
         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 0, 0, getDimension(R.dimen.dp20));
         button.setLayoutParams(params);
         button.setText(R.string.pick_a_time);
+        final Activity activity = (Activity) getBaseContext();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -325,21 +405,43 @@ public class FormBuilder {
             }
         });
         parentLayout.addView(button);
+
+        BFTimePicker bfTimePicker = new BFTimePicker();
+        bfTimePicker.setType(Constants.TYPE_TIME_PICKER);
+        views.add(bfTimePicker);
     }
 
     /**
      * Adds a section break to the screen.
      */
     public void addSectionBreak() {
-        Button button = new Button(activity);
+        Button button = new Button(this);
         button.setBackgroundColor(Color.GRAY);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getDimension(R.dimen.dp1));
         params.setMargins(0, getDimension(R.dimen.dp20), 0, getDimension(R.dimen.dp20));
         button.setLayoutParams(params);
         parentLayout.addView(button);
+
+        BFSectionBreak bfSectionBreak = new BFSectionBreak();
+        bfSectionBreak.setType(Constants.TYPE_SECTION_BREAK);
+        views.add(bfSectionBreak);
+    }
+
+    /**
+     * Exports the information about the views added so far into the a file in JSON format.
+     *
+     * @param filename the name of the file to be created.
+     * @throws IOException possibly thrown when creating the file in the ExternalStorageDirectory.
+     */
+    public void exportAsJson(String filename) throws IOException {
+        File file = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + filename);
+        ObjectMapper mapper = new ObjectMapper();
+        JSONFeed jsonFeed = new JSONFeed(views);
+        Log.i("", mapper.writeValueAsString(jsonFeed));
+        mapper.writeValue(file, jsonFeed);
     }
 
     private int getDimension(int id) {
-        return (int) activity.getResources().getDimension(id);
+        return (int) getResources().getDimension(id);
     }
 }

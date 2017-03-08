@@ -48,6 +48,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'org.projectlombok:lombok:1.16.12'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.8.6'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.6'
 }
 
 apply from: 'install.gradle'

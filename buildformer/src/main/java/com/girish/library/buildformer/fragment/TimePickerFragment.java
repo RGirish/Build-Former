@@ -1,4 +1,4 @@
-package com.girish.library.buildformer.fragments;
+package com.girish.library.buildformer.fragment;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
