@@ -1,1 +1,1 @@
-include ':app', ':buildformer'
+include ':buildformer', ':app'

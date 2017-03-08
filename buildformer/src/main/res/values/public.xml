@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <public name="mylib_app_name" type="string"/>
+    <public name="mylib_public_string" type="string"/>
+</resources>

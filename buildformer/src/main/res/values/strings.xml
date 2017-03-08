@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">BuildFormer</string>
+    <string name="chosen_date">"Chosen Date - %s"</string>
+    <string name="chosen_time">"Chosen Time - %s"</string>
+    <string name="pick_a_time">Pick a Time</string>
+    <string name="enter_a_time">Click button to enter a Time:</string>
+    <string name="pick_a_date">Pick a Date</string>
+    <string name="enter_a_date">Click button to enter a Date:</string>
+    <string name="submit">Submit</string>
+    <string name="save_form">Save Form</string>
 </resources>
