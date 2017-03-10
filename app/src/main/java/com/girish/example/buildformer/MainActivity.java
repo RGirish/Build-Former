@@ -1,11 +1,14 @@
 package com.girish.example.buildformer;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.widget.LinearLayout;
 
-import com.girish.library.buildformer.activity.FormBuilder;
+import com.girish.library.buildformer.FormBuilder;
 
+import java.io.File;
 import java.io.IOException;
 
 public class MainActivity extends FragmentActivity {
@@ -16,15 +19,12 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         LinearLayout layout = (LinearLayout) findViewById(R.id.mainLayout);
 
+        File file = new File(Environment.getExternalStorageDirectory() + File.separator + "myjson.json");
         FormBuilder builder = new FormBuilder(this, layout);
-        builder.createTextView("Girish Here", 20);
-        builder.createEditText("Enter your name here", FormBuilder.EDIT_TEXT_MODE_HINT, true);
-        builder.createTimePicker();
-        builder.createDatePicker();
         try {
-            builder.exportAsJson("myjson.json");
+            builder.createFromJson(file);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(getClass().getSimpleName(), e.toString());
         }
     }
 }

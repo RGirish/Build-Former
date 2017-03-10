@@ -11,6 +11,9 @@ if (project.hasProperty("android")) {
     task javadoc(type: Javadoc) {
         source = android.sourceSets.main.java.srcDirs
         classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+        exclude "com/girish/library/buildformer/fragment/*.java"
+        exclude "com/girish/library/buildformer/model/*.java"
+        exclude "com/girish/library/buildformer/utils/*.java"
     }
 } else {
     task sourcesJar(type: Jar, dependsOn: classes) {

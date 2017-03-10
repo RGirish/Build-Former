@@ -1,4 +1,21 @@
-package com.girish.library.buildformer.activity;
+/*
+ * @author Girish Raman
+ * http://github.com/rgirish
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.girish.library.buildformer;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,7 +37,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.girish.library.buildformer.R;
 import com.girish.library.buildformer.fragment.DatePickerFragment;
 import com.girish.library.buildformer.fragment.TimePickerFragment;
 import com.girish.library.buildformer.model.BFCheckbox;
@@ -43,6 +59,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * FormBuilder is the main point of entry for this library.
+ * <p>
+ * It takes in the Context of the Application using the library and a LinearLayout object in its constructors.
+ * It contains methods in it to dynamically construct views inside the LinearLayout provided.
+ *
+ * @author Girish Raman
+ */
 public class FormBuilder extends ContextWrapper {
     private LinearLayout parentLayout;
     public static final int EDIT_TEXT_MODE_HINT = 1;
@@ -331,7 +355,7 @@ public class FormBuilder extends ContextWrapper {
         Spinner spinner = new Spinner(this);
         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 0, 0, getDimension(R.dimen.dp20));
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.buildformer_spinner_item);
         for (String option : options) {
             adapter.add(option);
         }
@@ -350,8 +374,9 @@ public class FormBuilder extends ContextWrapper {
      */
     public void createDatePicker() {
         TextView textView = new TextView(this);
-        textView.setText(R.string.enter_a_date);
+        textView.setText(R.string.bf_enter_a_date);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        Log.e("DATE PICKER", String.valueOf(getDimension(R.dimen.dp20)));
         params.setMargins(0, getDimension(R.dimen.dp20), 0, getDimension(R.dimen.dp10));
         textView.setLayoutParams(params);
         textView.setTag("date");
@@ -361,7 +386,7 @@ public class FormBuilder extends ContextWrapper {
         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 0, 0, getDimension(R.dimen.dp20));
         button.setLayoutParams(params);
-        button.setText(R.string.pick_a_date);
+        button.setText(R.string.bf_pick_a_date);
         final Activity activity = (Activity) getBaseContext();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -383,7 +408,7 @@ public class FormBuilder extends ContextWrapper {
      */
     public void createTimePicker() {
         TextView textView = new TextView(this);
-        textView.setText(R.string.enter_a_time);
+        textView.setText(R.string.bf_enter_a_time);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, getDimension(R.dimen.dp20), 0, getDimension(R.dimen.dp10));
         textView.setLayoutParams(params);
@@ -394,7 +419,7 @@ public class FormBuilder extends ContextWrapper {
         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 0, 0, getDimension(R.dimen.dp20));
         button.setLayoutParams(params);
-        button.setText(R.string.pick_a_time);
+        button.setText(R.string.bf_pick_a_time);
         final Activity activity = (Activity) getBaseContext();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -414,7 +439,7 @@ public class FormBuilder extends ContextWrapper {
     /**
      * Adds a section break to the screen.
      */
-    public void addSectionBreak() {
+    public void createSectionBreak() {
         Button button = new Button(this);
         button.setBackgroundColor(Color.GRAY);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getDimension(R.dimen.dp1));
@@ -437,10 +462,63 @@ public class FormBuilder extends ContextWrapper {
         File file = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + filename);
         ObjectMapper mapper = new ObjectMapper();
         JSONFeed jsonFeed = new JSONFeed(views);
-        Log.i("", mapper.writeValueAsString(jsonFeed));
+        Log.i(getClass().getSimpleName(), mapper.writeValueAsString(jsonFeed));
         mapper.writeValue(file, jsonFeed);
     }
 
+    /**
+     * Creates an entire form from the information contained in the JSON file.
+     *
+     * @param json the JSON file.
+     * @throws IOException possibly thrown when accessing the JSON file.
+     */
+    public void createFromJson(File json) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        JSONFeed feed = mapper.readValue(json, JSONFeed.class);
+        List<BFView> views = feed.getViews();
+        for (BFView view : views) {
+            String type = view.getType();
+            if (type.equals(Constants.TYPE_TEXT_VIEW)) {
+                BFTextView bfTextView = (BFTextView) view;
+                createTextView(bfTextView.getText(), bfTextView.getTextSize());
+            } else if (type.equals(Constants.TYPE_EDIT_TEXT)) {
+                BFEditText bfEditText = (BFEditText) view;
+                createEditText(bfEditText.getDescription(), bfEditText.getMode(), bfEditText.isSingleLine());
+            } else if (type.equals(Constants.TYPE_CHECKBOX)) {
+                BFCheckbox bfCheckbox = (BFCheckbox) view;
+                createCheckbox(bfCheckbox.getDescription());
+            } else if (type.equals(Constants.TYPE_CHECKBOX_GROUP)) {
+                BFCheckboxGroup bfCheckboxGroup = (BFCheckboxGroup) view;
+                createCheckboxGroup(bfCheckboxGroup.getDescription(), bfCheckboxGroup.getOptions());
+            } else if (type.equals(Constants.TYPE_RADIO_GROUP)) {
+                BFRadioGroup bfRadioGroup = (BFRadioGroup) view;
+                createRadioGroup(bfRadioGroup.getDescription(), bfRadioGroup.getOptions());
+            } else if (type.equals(Constants.TYPE_RADIO_GROUP_RATINGS)) {
+                BFRadioGroupRatings bfRadioGroupRatings = (BFRadioGroupRatings) view;
+                createRatingsGroup(bfRadioGroupRatings.getDescription(), bfRadioGroupRatings.getMinRating(),
+                        bfRadioGroupRatings.getInStepsOf(), bfRadioGroupRatings.getNumberOfRatings());
+            } else if (type.equals(Constants.TYPE_DROP_DOWN_LIST)) {
+                BFDropDownList bfDropDownList = (BFDropDownList) view;
+                createDropDownList(bfDropDownList.getDescription(), bfDropDownList.getOptions());
+            } else if (type.equals(Constants.TYPE_SWITCH)) {
+                BFSwitch bfSwitch = (BFSwitch) view;
+                createSwitch(bfSwitch.getDescription(), bfSwitch.getFirstChoice(), bfSwitch.getSecondChoice());
+            } else if (type.equals(Constants.TYPE_DATE_PICKER)) {
+                createDatePicker();
+            } else if (type.equals(Constants.TYPE_TIME_PICKER)) {
+                createTimePicker();
+            } else if (type.equals(Constants.TYPE_SECTION_BREAK)) {
+                createSectionBreak();
+            }
+        }
+    }
+
+    /**
+     * This method extracts the dimension associated with the ID passed on to it from the resources directory.
+     *
+     * @param id the ID of the dimension
+     * @return the value of the dimension
+     */
     private int getDimension(int id) {
         return (int) getResources().getDimension(id);
     }

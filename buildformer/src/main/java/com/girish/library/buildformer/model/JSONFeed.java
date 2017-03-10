@@ -10,6 +10,9 @@ public class JSONFeed {
     @JsonProperty(Constants.JSON_KEY_VIEWS)
     private List<BFView> views;
 
+    public JSONFeed() {
+    }
+
     public JSONFeed(List<BFView> views) {
         this.views = views;
     }
