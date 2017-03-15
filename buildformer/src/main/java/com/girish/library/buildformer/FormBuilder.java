@@ -26,6 +26,7 @@ import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -135,10 +136,11 @@ public class FormBuilder extends ContextWrapper {
      */
     public void createEditText(String description, int mode, boolean singleLine) {
         EditText editText = new EditText(this);
+        editText.setMinimumWidth(getDimension(R.dimen.dp200));
         LinearLayout.LayoutParams params = null;
         if (mode == EDIT_TEXT_MODE_HINT) {
             editText.setHint(description);
-            params = new LinearLayout.LayoutParams(getDimension(R.dimen.dp200), ViewGroup.LayoutParams.WRAP_CONTENT);
+            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.setMargins(0, getDimension(R.dimen.dp20), 0, getDimension(R.dimen.dp20));
         } else if (mode == EDIT_TEXT_MODE_SEPARATE) {
             TextView textView = new TextView(this);
@@ -151,7 +153,14 @@ public class FormBuilder extends ContextWrapper {
             params = new LinearLayout.LayoutParams(getDimension(R.dimen.dp200), ViewGroup.LayoutParams.WRAP_CONTENT);
             params.setMargins(0, 0, 0, getDimension(R.dimen.dp20));
         }
-        if (!singleLine) editText.setLines(5);
+        if (singleLine) {
+            editText.setMaxLines(1);
+            editText.setSingleLine();
+            editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+            editText.setHorizontallyScrolling(true);
+        } else {
+            editText.setLines(5);
+        }
         editText.setLayoutParams(params);
         parentLayout.addView(editText);
 
@@ -221,7 +230,7 @@ public class FormBuilder extends ContextWrapper {
         radioGroup.setLayoutParams(params);
 
         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(getDimension(R.dimen.dp20), 0, getDimension(R.dimen.dp20), 0);
+        params.setMargins(getDimension(R.dimen.dp10), 0, getDimension(R.dimen.dp10), 0);
         for (int index = minRating; index <= inStepsOf * numberOfRatings; index += inStepsOf) {
             RadioButton radioButton = new RadioButton(this);
             radioButton.setLayoutParams(params);
@@ -355,6 +364,7 @@ public class FormBuilder extends ContextWrapper {
         Spinner spinner = new Spinner(this);
         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 0, 0, getDimension(R.dimen.dp20));
+        spinner.setLayoutParams(params);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.buildformer_spinner_item);
         for (String option : options) {
             adapter.add(option);

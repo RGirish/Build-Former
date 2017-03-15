@@ -59,6 +59,7 @@ public class MainActivity extends FragmentActivity {
         }
         findViewById(R.id.recreateFormButton).setVisibility(View.VISIBLE);
         findViewById(R.id.saveFormButton).setVisibility(View.GONE);
+        layout.removeAllViews();
     }
 
     public void recreateForm(View view) {
