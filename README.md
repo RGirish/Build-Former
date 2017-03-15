@@ -64,5 +64,5 @@ try {
 ## Adding a dependency to this Library
 The library is available in the jCenter() repository only:
 ```
-compile 'com.girish.library.buildformer:buildformer:0.9.2'
+compile 'com.girish.library.buildformer:buildformer:0.9.3'
 ```

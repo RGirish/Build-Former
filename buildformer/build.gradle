@@ -14,7 +14,7 @@ ext {
     siteUrl = 'https://github.com/RGirish/Build-Fomer'
     gitUrl = 'https://github.com/RGirish/Build-Fomer.git'
 
-    libraryVersion = '0.9.2'
+    libraryVersion = '0.9.3'
 
     developerId = 'rgirish1994'
     developerName = 'Girish Raman'
